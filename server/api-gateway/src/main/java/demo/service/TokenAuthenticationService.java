@@ -32,18 +32,18 @@ public class TokenAuthenticationService {
 
 	public Authentication getAuthentication(HttpServletRequest request) {
 		String token = request.getHeader(headerString);
-		if(token != null)
-        {
-			// parse the token.
+		String name = request.getHeader("Name");
+		if(token != null) { // parse the token.
             String username = Jwts.parser()
                         .setSigningKey(secret)
                         .parseClaimsJws(token)
                         .getBody()
                         .getSubject();
-            if(username != null) // username retrieved successfully
-            {
-            	System.out.println(username);
+            if(username.equals(name)) {
+             	System.out.println(username + " matches " + name);
                 return new AuthenticatedUser(username);
+            } else {
+            	System.out.println(username + " does not match " + name);
             }
         }
 		return null;
